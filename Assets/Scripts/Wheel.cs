@@ -6,6 +6,8 @@ public class Wheel : MonoBehaviour
 {
     private Rigidbody rb;
 
+    public bool frontLeft, frontRight, rearLeft, rearRight;
+
     [Header("Suspension")]
     public float restLength;    //(idle) length of the spring
     public float springTravel;  //how much the spring is allowed to shrink/expand, must increase w restlength
@@ -27,6 +29,10 @@ public class Wheel : MonoBehaviour
 
     [Header("Wheel")]
     public float wheelRadius;
+    public float steerAngle;
+    public float steerTime;
+
+    private float wheelAngle;
 
     private void Start()
     {
@@ -34,6 +40,12 @@ public class Wheel : MonoBehaviour
 
         minLength = restLength - springTravel;
         maxLength = restLength + springTravel;
+    }
+
+    private void Update()
+    {
+        wheelAngle = Mathf.Lerp(wheelAngle, steerAngle, steerTime * Time.deltaTime); //try lerpAngle here
+        transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y + steerAngle, transform.localRotation.z);
     }
 
     private void FixedUpdate()
